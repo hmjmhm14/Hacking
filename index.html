@@ -1,204 +1,689 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber Inspector</title>
+
+<title>CYBER INSPECTOR</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    background: #080b12;
-    color: #e5e7eb;
-    font-family: Arial, sans-serif;
     min-height: 100vh;
+
+    padding: 25px;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #10283b 0%,
+            #080b12 45%,
+            #030508 100%
+        );
+
+    color: #e5e7eb;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
-.container {
+.dashboard {
     width: 100%;
-    max-width: 480px;
-    background: #111827;
+    max-width: 600px;
+
+    padding: 32px;
+
+    background: rgba(17, 24, 39, 0.96);
+
     border: 1px solid #263449;
+
     border-radius: 16px;
-    padding: 28px;
-    box-shadow: 0 0 35px #00aaff15;
+
+    box-shadow:
+        0 0 35px rgba(2, 132, 199, 0.2);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 35px;
 }
 
 h1 {
-    text-align: center;
+    margin: 0;
+
     color: #38bdf8;
-    letter-spacing: 2px;
+
+    letter-spacing: 4px;
+
+    font-size: 32px;
+
+    text-shadow:
+        0 0 15px rgba(56, 189, 248, 0.4);
 }
 
-.subtitle {
-    text-align: center;
-    color: #8492a6;
-    margin-bottom: 30px;
+header p {
+    margin-top: 10px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
 }
 
 label {
     display: block;
-    margin: 15px 0 8px;
-    color: #aab8ca;
+
+    margin-bottom: 10px;
+
+    color: #38bdf8;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
 }
 
 input {
     width: 100%;
-    padding: 14px;
-    background: #080f1c;
-    border: 1px solid #334155;
-    border-radius: 8px;
+
+    padding: 15px;
+
     color: white;
+
+    background: #080f1c;
+
+    border: 1px solid #334155;
+
+    border-radius: 8px;
+
     outline: none;
+
+    font-size: 15px;
+}
+
+input::placeholder {
+    color: #64748b;
 }
 
 input:focus {
     border-color: #38bdf8;
+
+    box-shadow:
+        0 0 12px rgba(56, 189, 248, 0.15);
 }
 
 button {
     width: 100%;
-    margin-top: 22px;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    background: #0284c7;
+
+    margin-top: 18px;
+
+    padding: 15px;
+
     color: white;
-    font-size: 16px;
+
+    background: #0284c7;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
     font-weight: bold;
+
+    letter-spacing: 1px;
+
     cursor: pointer;
+
+    transition: 0.2s;
 }
 
 button:hover {
     background: #0369a1;
 }
 
-#result {
-    display: none;
-    margin-top: 25px;
-    padding: 18px;
+button:active {
+    transform: scale(0.99);
+}
+
+#status {
+    min-height: 20px;
+
+    margin-top: 15px;
+
+    text-align: center;
+
+    color: #fbbf24;
+
+    font-size: 13px;
+}
+
+#results {
+    margin-top: 30px;
+
+    padding: 22px;
+
     background: #080f1c;
+
     border: 1px solid #263449;
-    border-radius: 10px;
+
+    border-radius: 12px;
 }
 
-.item {
-    padding: 10px 0;
-    border-bottom: 1px solid #263449;
-    overflow-wrap: anywhere;
+#results h2 {
+    margin-top: 0;
+
+    color: #38bdf8;
+
+    font-size: 17px;
+
+    letter-spacing: 1px;
 }
 
-.item:last-child {
-    border: none;
+.profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin: 25px 0;
 }
 
-.item span {
+.avatar {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #0f172a
+        );
+
+    border: 2px solid #38bdf8;
+
+    color: white;
+
+    font-size: 24px;
+
+    font-weight: bold;
+}
+
+.profile h3 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 18px;
+}
+
+.profile p {
+    margin-top: 7px;
+
     color: #38bdf8;
 }
 
-#error {
-    color: #f87171;
-    margin-top: 15px;
-    text-align: center;
+.info {
+    width: 100%;
 }
+
+.info p {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    padding: 13px 0;
+
+    margin: 0;
+
+    border-bottom: 1px solid #263449;
+
+    font-size: 14px;
+}
+
+.info p:last-child {
+    border-bottom: none;
+}
+
+.info strong {
+    color: #94a3b8;
+
+    font-weight: normal;
+}
+
+.info span {
+    color: #38bdf8;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
+}
+
+.error {
+    color: #f87171 !important;
+}
+
+.success {
+    color: #4ade80 !important;
+}
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .dashboard {
+        padding: 22px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .info p {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .info span {
+        text-align: left;
+    }
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="container">
+<main class="dashboard">
 
-<h1>CYBER INSPECTOR</h1>
+<header>
 
-<p class="subtitle">IP Information Dashboard</p>
+<h1>
+CYBER INSPECTOR
+</h1>
 
-<label>Telegram ID (для вашей записи)</label>
-<input id="telegram" placeholder="Например: 123456789">
+<p>
+TELEGRAM ACCOUNT INTELLIGENCE
+</p>
 
-<label>IP-адрес, предоставленный пользователем</label>
-<input id="ip" placeholder="Например: 8.8.8.8">
+</header>
 
-<button onclick="checkIP()">ПРОВЕРИТЬ IP</button>
 
-<div id="error"></div>
+<section>
 
-<div id="result">
-    <h3 style="color:#38bdf8">Результат проверки</h3>
-    <div class="item">Telegram ID: <span id="r_id"></span></div>
-    <div class="item">IP: <span id="r_ip"></span></div>
-    <div class="item">Страна: <span id="r_country"></span></div>
-    <div class="item">Город: <span id="r_city"></span></div>
-    <div class="item">Регион: <span id="r_region"></span></div>
-    <div class="item">Провайдер: <span id="r_isp"></span></div>
-    <div class="item">ASN: <span id="r_asn"></span></div>
+<label for="telegramId">
+TELEGRAM ID
+</label>
+
+
+<input
+    id="telegramId"
+    type="text"
+    placeholder="Введите Telegram ID"
+    autocomplete="off"
+>
+
+
+<button id="searchButton">
+SEARCH ACCOUNT
+</button>
+
+
+<p id="status"></p>
+
+</section>
+
+
+<section id="results" hidden>
+
+<h2>
+ACCOUNT INFORMATION
+</h2>
+
+
+<div class="profile">
+
+<div class="avatar" id="avatar">
+?
+</div>
+
+<div>
+
+<h3 id="name">
+—
+</h3>
+
+<p id="username">
+—
+</p>
+
 </div>
 
 </div>
+
+
+<div class="info">
+
+<p>
+<strong>Telegram ID</strong>
+
+<span id="r_id">
+—
+</span>
+</p>
+
+
+<p>
+<strong>Имя</strong>
+
+<span id="r_name">
+—
+</span>
+</p>
+
+
+<p>
+<strong>Username</strong>
+
+<span id="r_username">
+—
+</span>
+</p>
+
+
+<p>
+<strong>Bio</strong>
+
+<span id="r_bio">
+—
+</span>
+</p>
+
+
+<p>
+<strong>Статус</strong>
+
+<span id="r_status">
+—
+</span>
+</p>
+
+
+<p>
+<strong>Источник</strong>
+
+<span id="r_source">
+—
+</span>
+</p>
+
+</div>
+
+</section>
+
+</main>
+
 
 <script>
-async function checkIP() {
-    const telegram = document.getElementById("telegram").value.trim();
-    const ip = document.getElementById("ip").value.trim();
 
-    const error = document.getElementById("error");
-    const result = document.getElementById("result");
+/*
+    ДЕМОНСТРАЦИОННАЯ БАЗА
 
-    error.textContent = "";
-    result.style.display = "none";
+    Это не база Telegram.
+    Здесь находятся только данные,
+    которые мы сами прописали для тестирования.
+*/
 
-    if (!ip) {
-        error.textContent = "Введите IP-адрес.";
-        return;
+const users = {
+
+    "123456789": {
+
+        id: "123456789",
+
+        name: "Test User",
+
+        username: "test_user",
+
+        bio: "Тестовый профиль",
+
+        status: "Активен",
+
+        source: "Local Demo Database"
+
+    },
+
+
+    "987654321": {
+
+        id: "987654321",
+
+        name: "Cyber Inspector",
+
+        username: "cyber_test",
+
+        bio: "Демонстрационный аккаунт",
+
+        status: "Активен",
+
+        source: "Local Demo Database"
+
+    },
+
+
+    "555555555": {
+
+        id: "555555555",
+
+        name: "Demo Account",
+
+        username: "demo_account",
+
+        bio: "Пример профиля для проверки интерфейса",
+
+        status: "Неизвестен",
+
+        source: "Local Demo Database"
+
     }
 
-    try {
-        const response = await fetch(
-            "https://ipwho.is/" + encodeURIComponent(ip)
-        );
+};
 
-        const data = await response.json();
 
-        if (!data.success) {
-            error.textContent = "Не удалось проверить IP.";
-            return;
+const input =
+    document.getElementById("telegramId");
+
+const button =
+    document.getElementById("searchButton");
+
+const status =
+    document.getElementById("status");
+
+const results =
+    document.getElementById("results");
+
+
+button.addEventListener(
+    "click",
+    searchAccount
+);
+
+
+input.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            searchAccount();
+
         }
 
-        document.getElementById("r_id").textContent =
-            telegram || "Не указан";
-
-        document.getElementById("r_ip").textContent =
-            data.ip || "—";
-
-        document.getElementById("r_country").textContent =
-            data.country || "—";
-
-        document.getElementById("r_city").textContent =
-            data.city || "—";
-
-        document.getElementById("r_region").textContent =
-            data.region || "—";
-
-        document.getElementById("r_isp").textContent =
-            data.connection?.isp || "—";
-
-        document.getElementById("r_asn").textContent =
-            data.connection?.asn || "—";
-
-        result.style.display = "block";
-
-    } catch (e) {
-        error.textContent = "Ошибка соединения. Попробуйте ещё раз.";
     }
+);
+
+
+function searchAccount() {
+
+    const id =
+        input.value.trim();
+
+
+    results.hidden = true;
+
+    status.className = "";
+
+    status.textContent = "";
+
+
+    /*
+        Проверяем формат ID.
+    */
+
+    if (!/^\d{5,20}$/.test(id)) {
+
+        status.textContent =
+            "Введите корректный числовой Telegram ID.";
+
+        status.className = "error";
+
+        return;
+
+    }
+
+
+    status.textContent =
+        "Поиск информации...";
+
+
+    button.disabled = true;
+
+
+    /*
+        Небольшая задержка,
+        чтобы интерфейс выглядел как настоящий поиск.
+    */
+
+    setTimeout(
+        function() {
+
+            const user =
+                users[id];
+
+
+            if (!user) {
+
+                status.textContent =
+                    "Профиль не найден в демонстрационной базе.";
+
+                status.className = "error";
+
+                button.disabled = false;
+
+                return;
+
+            }
+
+
+            showUser(user);
+
+
+            status.textContent =
+                "Проверка завершена.";
+
+            status.className = "success";
+
+
+            button.disabled = false;
+
+        },
+
+        500
+
+    );
+
 }
+
+
+function showUser(user) {
+
+    document.getElementById("r_id")
+        .textContent = user.id;
+
+
+    document.getElementById("r_name")
+        .textContent = user.name;
+
+
+    document.getElementById("r_username")
+        .textContent =
+            "@" + user.username;
+
+
+    document.getElementById("r_bio")
+        .textContent = user.bio;
+
+
+    document.getElementById("r_status")
+        .textContent = user.status;
+
+
+    document.getElementById("r_source")
+        .textContent = user.source;
+
+
+    document.getElementById("name")
+        .textContent = user.name;
+
+
+    document.getElementById("username")
+        .textContent =
+            "@" + user.username;
+
+
+    /*
+        Берём первую букву имени
+        для аватара.
+    */
+
+    const avatar =
+        document.getElementById("avatar");
+
+
+    avatar.textContent =
+        user.name.charAt(0).toUpperCase();
+
+
+    results.hidden = false;
+
+}
+
 </script>
 
 </body>
