@@ -4,632 +4,473 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYBER INSPECTOR</title>
-
+<title>Augram — Private Messenger</title>
 <style>
 *{box-sizing:border-box}
-body{
-    margin:0;min-height:100vh;padding:25px;
-    display:flex;justify-content:center;align-items:center;
-    background:radial-gradient(circle at top,#10283b 0%,#080b12 45%,#030508 100%);
-    color:#e5e7eb;font-family:Arial,Helvetica,sans-serif
-}
-.dashboard{
-    width:100%;max-width:650px;padding:32px;
-    background:rgba(17,24,39,.96);
-    border:1px solid #263449;border-radius:16px;
-    box-shadow:0 0 35px rgba(2,132,199,.2)
-}
-header{text-align:center;margin-bottom:35px}
-h1{
-    margin:0;color:#38bdf8;letter-spacing:4px;
-    font-size:32px;text-shadow:0 0 15px rgba(56,189,248,.4)
-}
-header p{margin-top:10px;color:#64748b;font-size:12px;letter-spacing:2px}
-label{
-    display:block;margin:18px 0 10px;color:#38bdf8;
-    font-size:13px;font-weight:bold;letter-spacing:1px
-}
-input,textarea{
-    width:100%;padding:15px;color:white;background:#080f1c;
-    border:1px solid #334155;border-radius:8px;outline:none;font-size:15px
-}
-input:focus,textarea:focus{border-color:#38bdf8;box-shadow:0 0 12px rgba(56,189,248,.15)}
-input::placeholder,textarea::placeholder{color:#64748b}
-button{
-    padding:14px;color:white;background:#0284c7;
-    border:0;border-radius:8px;font-size:13px;
-    font-weight:bold;letter-spacing:1px;cursor:pointer;transition:.2s
-}
-button:hover{background:#0369a1}
-button:disabled{opacity:.5;cursor:wait}
-.main-button{width:100%;margin-top:18px}
-.secondary{background:#1e293b;border:1px solid #334155}
-.danger{background:#991b1b}
-#status{min-height:20px;margin-top:15px;text-align:center;color:#fbbf24;font-size:13px}
-.error{color:#f87171!important}
-.success{color:#4ade80!important}
-#results,.panel{
-    margin-top:25px;padding:22px;background:#080f1c;
-    border:1px solid #263449;border-radius:12px
-}
-h2{margin-top:0;color:#38bdf8;font-size:17px;letter-spacing:1px}
-.profile{display:flex;align-items:center;gap:15px;margin:25px 0}
-.avatar{
-    width:65px;height:65px;min-width:65px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,#0284c7,#0f172a);
-    border:2px solid #38bdf8;color:white;font-size:24px;font-weight:bold
-}
-.profile h3{margin:0;color:white;font-size:18px;overflow-wrap:anywhere}
-.profile p{color:#38bdf8;overflow-wrap:anywhere}
-.info p{
-    display:flex;justify-content:space-between;gap:20px;
-    padding:13px 0;margin:0;border-bottom:1px solid #263449;font-size:14px
-}
-.info p:last-child{border:0}
-.info strong{color:#94a3b8;font-weight:normal}
-.info span{color:#38bdf8;text-align:right;overflow-wrap:anywhere}
-.actions,.storage-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.actions button,.storage-actions button{flex:1;min-width:120px}
-.description{color:#64748b;font-size:12px;line-height:1.7}
-.database-info{color:#94a3b8;font-size:13px;line-height:2}
-.database-info span{color:#38bdf8}
-.hidden{display:none!important}
-hr{border:0;border-top:1px solid #263449;margin:25px 0}
-@media(max-width:600px){
-    body{padding:12px}
-    .dashboard{padding:22px}
-    h1{font-size:25px}
-    .info p{flex-direction:column;gap:6px}
-    .info span{text-align:left}
+body{margin:0;background:#0e1621;color:#e8edf3;font-family:Arial,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:340px;background:#17212b;border-right:1px solid #263746;display:flex;flex-direction:column}
+.brand{padding:20px;font-size:23px;font-weight:bold;color:#61a9e9}
+.search{padding:10px 15px}
+.search input{width:100%;padding:12px;border:0;border-radius:9px;background:#242f3d;color:white;outline:none}
+.tabs{display:flex;padding:5px 12px;gap:5px}
+.tabs button{flex:1;padding:10px;background:none;color:#8999a8;border-radius:8px}
+.tabs button.active{background:#263b50;color:#65b5f5}
+.chat-list{overflow:auto;flex:1}
+.chat{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer}
+.chat:hover,.chat.selected{background:#263746}
+.avatar{width:46px;height:46px;border-radius:50%;background:#3587c8;display:grid;place-items:center;font-size:19px;font-weight:bold;flex-shrink:0}
+.chat-info{min-width:0;flex:1}
+.chat-info strong{display:block;margin-bottom:5px}
+.chat-info small{color:#91a0ae}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:65px;background:#17212b;display:flex;align-items:center;padding:0 20px;gap:12px}
+.topbar .avatar{width:40px;height:40px}
+.topbar small{display:block;color:#8e9ba9;margin-top:4px}
+.messages{flex:1;padding:20px;overflow:auto;display:flex;flex-direction:column;gap:10px;background:#0e1621}
+.bubble{max-width:70%;padding:11px 14px;border-radius:12px;background:#182533;align-self:flex-start;line-height:1.45;overflow-wrap:anywhere}
+.bubble.mine{align-self:flex-end;background:#2b5278}
+.bubble small{display:block;text-align:right;color:#a8bacb;margin-top:5px;font-size:10px}
+.composer{padding:12px;background:#17212b;display:flex;gap:10px}
+.composer input{flex:1;min-width:0;padding:13px;border:0;border-radius:10px;background:#263746;color:white;outline:none}
+.send{background:#3390ec;color:white;padding:0 22px;border-radius:9px}
+.admin{display:none;position:fixed;inset:0;background:#0e1621;z-index:5;overflow:auto;padding:25px}
+.admin-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.admin h1{color:#64b5f6}
+.panel{background:#17212b;border:1px solid #293b4b;border-radius:12px;padding:20px;margin-top:18px}
+.panel h3{margin-top:0}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row input{flex:1;min-width:180px}
+.field{background:#263746;color:white;border:1px solid #3b5062;padding:12px;border-radius:8px;outline:none}
+.action{padding:12px 17px;background:#3390ec;color:white;border-radius:8px}
+.secondary{padding:11px 15px;background:#263746;color:white;border-radius:8px}
+.danger{background:#a63b48;color:white}
+.result{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.data{padding:14px;background:#202e3b;border-radius:9px;overflow-wrap:anywhere}
+.data label{display:block;color:#8da1b2;font-size:12px;margin-bottom:7px}
+.data strong{font-size:15px}
+.note{width:100%;min-height:90px;resize:vertical}
+.notice{color:#a7b7c6;line-height:1.6;font-size:13px}
+.close{background:#a63b48;color:white;padding:11px 17px;border-radius:8px}
+.empty{margin:auto;color:#8092a3;text-align:center}
+@media(max-width:650px){
+.sidebar{width:100%}
+.main{display:none}
+.sidebar.hidden{display:none}
+.main.mobile{display:flex}
 }
 </style>
 </head>
-
 <body>
-<main class="dashboard">
 
-<header>
-<h1>CYBER INSPECTOR</h1>
-<p>TELEGRAM ACCOUNT INTELLIGENCE</p>
-</header>
+<div class="app">
+ <aside class="sidebar" id="sidebar">
+  <div class="brand">◈ Augram</div>
+  <div class="search">
+   <input id="chatSearch" placeholder="Поиск чатов..." oninput="renderChats()">
+  </div>
+  <div class="tabs">
+   <button class="active">Все</button>
+   <button onclick="openAdmin()">Админ</button>
+  </div>
+  <div class="chat-list" id="chatList"></div>
+ </aside>
 
-<section>
-<label for="searchInput">TELEGRAM ID / USERNAME / LINK</label>
-<input id="searchInput" placeholder="ID, @username или t.me/username" autocomplete="off">
-<button class="main-button" id="searchButton">SEARCH ACCOUNT</button>
-<p id="status"></p>
-</section>
-
-<section id="results" hidden>
-<h2>ACCOUNT INFORMATION</h2>
-
-<div class="profile">
-<div class="avatar" id="avatar">?</div>
-<div>
-<h3 id="name">—</h3>
-<p id="username">—</p>
-</div>
-</div>
-
-<div class="info">
-<p><strong>Telegram ID</strong><span id="r_id">—</span></p>
-<p><strong>Имя</strong><span id="r_name">—</span></p>
-<p><strong>Username</strong><span id="r_username">—</span></p>
-<p><strong>Bio</strong><span id="r_bio">Не получено</span></p>
-<p><strong>Статус</strong><span id="r_status">Неизвестен</span></p>
-<p><strong>Источник</strong><span id="r_source">—</span></p>
+ <main class="main" id="main">
+  <div class="empty" id="empty">Выбери чат, чтобы начать общение</div>
+  <div id="chatWindow" style="display:none;flex-direction:column;height:100%">
+   <div class="topbar">
+    <div class="avatar" id="headAvatar"></div>
+    <div><strong id="headName"></strong><small id="headStatus">Локальный профиль</small></div>
+    <button class="secondary" style="margin-left:auto" onclick="showProfile()">Профиль</button>
+   </div>
+   <div class="messages" id="messages"></div>
+   <div class="composer">
+    <input id="messageInput" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendMessage()">
+    <button class="send" onclick="sendMessage()">➤</button>
+   </div>
+  </div>
+ </main>
 </div>
 
-<div class="actions">
-<button id="openTelegram" class="secondary">OPEN TELEGRAM</button>
-<button id="saveResult">SAVE RESULT</button>
+<div class="admin" id="admin">
+ <div class="admin-head">
+  <div>
+   <h1>◈ Augram Admin</h1>
+   <div class="notice">Локальная панель управления</div>
+  </div>
+  <button class="close" onclick="closeAdmin()">Закрыть ✕</button>
+ </div>
+
+ <div class="panel">
+  <h3>Поиск Telegram ID</h3>
+  <div class="row">
+   <input class="field" id="userId" placeholder="Введи Telegram ID">
+   <button class="action" onclick="findUser()">Найти пользователя</button>
+  </div>
+  <p class="notice">
+   Поиск работает по локальной базе и данным, которые ты сам добавил.
+   Для реальных данных нужен авторизованный источник Telegram.
+  </p>
+ </div>
+
+ <div class="panel" id="userResult" style="display:none">
+  <h3>Информация о пользователе</h3>
+  <div class="result" id="userData"></div>
+  <h3 style="margin-top:22px">Заметки администратора</h3>
+  <textarea class="field note" id="userNote" placeholder="Добавить заметку..."></textarea>
+  <button class="action" style="margin-top:10px" onclick="saveNote()">Сохранить заметку</button>
+  <button class="secondary" style="margin-top:10px" onclick="exportUser()">Экспортировать JSON</button>
+ </div>
+
+ <div class="panel">
+  <h3>Добавить запись в локальную базу</h3>
+  <div class="row" style="margin-bottom:10px">
+   <input class="field" id="newId" placeholder="Telegram ID">
+   <input class="field" id="newName" placeholder="Имя">
+  </div>
+  <div class="row" style="margin-bottom:10px">
+   <input class="field" id="newUsername" placeholder="Username">
+   <input class="field" id="newPhone" placeholder="Телефон (если известен)">
+  </div>
+  <div class="row">
+   <input class="field" id="newSource" placeholder="Источник данных">
+   <button class="action" onclick="addUser()">Добавить</button>
+  </div>
+ </div>
+
+ <div class="panel">
+  <h3>IP-анализатор</h3>
+  <div class="row">
+   <input class="field" id="ipInput" placeholder="Введи известный IP">
+   <button class="action" onclick="checkIP()">Проверить</button>
+  </div>
+  <div id="ipResult" class="notice" style="margin-top:15px"></div>
+ </div>
+
+ <div class="panel">
+  <h3>Локальная база</h3>
+  <div id="databaseCount" class="notice"></div>
+  <button class="secondary" onclick="exportDatabase()">Экспорт базы JSON</button>
+  <button class="secondary danger" onclick="clearDatabase()">Очистить базу</button>
+ </div>
 </div>
-</section>
-
-<section class="panel">
-<h2>PUBLIC TELEGRAM SEARCH</h2>
-<p class="description">
-Открывает публичные инструменты Telegram для поиска.
-Результаты поиска отображаются непосредственно в Telegram.
-Этот режим не получает закрытые данные аккаунтов.
-</p>
-<button class="main-button" id="webSearch">SEARCH IN TELEGRAM WEB</button>
-<button class="main-button secondary" id="googleSearch">SEARCH PUBLIC WEB</button>
-<button class="main-button secondary" id="telegramSearch">OPEN TELEGRAM</button>
-</section>
-
-<section class="panel">
-<h2>ADD ACCOUNT</h2>
-<p class="description">Добавление известных публичных данных в локальную базу.</p>
-
-<label for="addId">TELEGRAM ID</label>
-<input id="addId" placeholder="Числовой ID">
-
-<label for="addName">NAME</label>
-<input id="addName" placeholder="Имя">
-
-<label for="addUsername">USERNAME</label>
-<input id="addUsername" placeholder="@username">
-
-<label for="addBio">BIO</label>
-<textarea id="addBio" placeholder="Описание профиля"></textarea>
-
-<label for="addStatus">STATUS</label>
-<input id="addStatus" placeholder="Неизвестен">
-
-<button class="main-button" id="addButton">SAVE ACCOUNT</button>
-<p id="addMessage"></p>
-</section>
-
-<section class="panel">
-<h2>DATABASE MANAGEMENT</h2>
-
-<div class="database-info">
-Database: <span>LOCAL</span><br>
-Profiles: <span id="count">0</span><br>
-API: <span>NO PAID API</span><br>
-Connection: <span>NO SERVER</span>
-</div>
-
-<div class="storage-actions">
-<button class="secondary" id="exportButton">EXPORT JSON</button>
-<button class="secondary" id="importButton">IMPORT JSON</button>
-<button class="danger" id="clearButton">CLEAR DATABASE</button>
-</div>
-
-<input type="file" id="fileInput" accept=".json,application/json" class="hidden">
-</section>
-
-</main>
 
 <script>
-"use strict";
+// ====================================
+// AUGRAM — LOCAL MESSENGER
+// ====================================
 
-/* =====================================
-   CYBER INSPECTOR DATABASE
-===================================== */
+const demoUsers = [
+ {
+  id:"100001",
+  name:"Alex",
+  username:"alex_demo",
+  phone:"Не указан",
+  source:"Демонстрационная запись",
+  about:"Демонстрационный профиль",
+  note:""
+ },
+ {
+  id:"100002",
+  name:"Michael",
+  username:"michael_demo",
+  phone:"Не указан",
+  source:"Демонстрационная запись",
+  about:"Локальный профиль",
+  note:""
+ },
+ {
+  id:"100003",
+  name:"Daniel",
+  username:"daniel_demo",
+  phone:"Не указан",
+  source:"Демонстрационная запись",
+  about:"Локальный профиль",
+  note:""
+ }
+];
 
-const STORAGE_KEY = "cyber_inspector_v3";
+let database=JSON.parse(localStorage.getItem("augram_users")||"null") || demoUsers;
+let chats=JSON.parse(localStorage.getItem("augram_chats")||"null") || [
+ {id:"100001",messages:[{text:"Привет! Это демонстрационный чат.",mine:false,time:"12:30"}]},
+ {id:"100002",messages:[{text:"Добро пожаловать в Augram.",mine:false,time:"12:45"}]},
+ {id:"100003",messages:[{text:"Твой собственный мессенджер!",mine:false,time:"13:00"}]}
+];
 
-const initialUsers = {
-    "123456789":{
-        id:"123456789",
-        name:"Test User",
-        username:"test_user",
-        bio:"Тестовый профиль",
-        status:"Активен",
-        source:"Demo Database"
-    },
-    "987654321":{
-        id:"987654321",
-        name:"Cyber Inspector",
-        username:"cyber_test",
-        bio:"Демонстрационный аккаунт",
-        status:"Активен",
-        source:"Demo Database"
-    },
-    "555555555":{
-        id:"555555555",
-        name:"Demo Account",
-        username:"demo_account",
-        bio:"Пример профиля",
-        status:"Неизвестен",
-        source:"Demo Database"
-    }
-};
+let selected=null;
+let currentAdminUser=null;
 
-const $ = id => document.getElementById(id);
-
-let users = loadDatabase();
-let selectedUser = null;
-
-/* =====================================
-   DATABASE
-===================================== */
-
-function loadDatabase(){
-    try{
-        const data = localStorage.getItem(STORAGE_KEY);
-        if(!data){
-            localStorage.setItem(STORAGE_KEY,JSON.stringify(initialUsers));
-            return {...initialUsers};
-        }
-
-        const parsed = JSON.parse(data);
-
-        if(!parsed || typeof parsed !== "object" || Array.isArray(parsed)){
-            throw new Error("Invalid database");
-        }
-
-        return parsed;
-    }catch(error){
-        console.error(error);
-        return {...initialUsers};
-    }
+function persist(){
+ localStorage.setItem("augram_users",JSON.stringify(database));
+ localStorage.setItem("augram_chats",JSON.stringify(chats));
 }
 
-function saveDatabase(){
-    try{
-        localStorage.setItem(STORAGE_KEY,JSON.stringify(users));
-        updateCount();
-        return true;
-    }catch(error){
-        alert("Ошибка сохранения базы данных.");
-        return false;
-    }
+function getUser(id){
+ return database.find(u=>String(u.id)===String(id));
+}
+
+function getChat(id){
+ let c=chats.find(x=>String(x.id)===String(id));
+ if(!c){
+  c={id:String(id),messages:[]};
+  chats.push(c);
+ }
+ return c;
+}
+
+function renderChats(){
+ let query=document.getElementById("chatSearch").value.toLowerCase();
+ let list=document.getElementById("chatList");
+ list.innerHTML="";
+ chats.forEach(c=>{
+  let u=getUser(c.id);
+  if(!u)return;
+  if(!(u.name+" "+u.username+" "+u.id).toLowerCase().includes(query))return;
+  let div=document.createElement("div");
+  div.className="chat"+(selected===c.id?" selected":"");
+  div.onclick=()=>openChat(c.id);
+  let avatar=document.createElement("div");
+  avatar.className="avatar";
+  avatar.textContent=u.name.charAt(0).toUpperCase();
+  let info=document.createElement("div");
+  info.className="chat-info";
+  let name=document.createElement("strong");
+  name.textContent=u.name;
+  let sub=document.createElement("small");
+  sub.textContent=c.messages.length?c.messages[c.messages.length-1].text:"Нет сообщений";
+  info.append(name,sub);
+  div.append(avatar,info);
+  list.append(div);
+ });
+}
+
+function openChat(id){
+ selected=String(id);
+ let u=getUser(id);
+ if(!u)return;
+ document.getElementById("empty").style.display="none";
+ let win=document.getElementById("chatWindow");
+ win.style.display="flex";
+ document.getElementById("headAvatar").textContent=u.name[0].toUpperCase();
+ document.getElementById("headName").textContent=u.name;
+ document.getElementById("headStatus").textContent="@"+u.username;
+ document.getElementById("sidebar").classList.add("hidden");
+ document.getElementById("main").classList.add("mobile");
+ renderMessages();
+ renderChats();
+}
+
+function renderMessages(){
+ let box=document.getElementById("messages");
+ box.innerHTML="";
+ let chat=getChat(selected);
+ chat.messages.forEach(m=>{
+  let div=document.createElement("div");
+  div.className="bubble"+(m.mine?" mine":"");
+  let text=document.createTextNode(m.text);
+  let time=document.createElement("small");
+  time.textContent=m.time;
+  div.append(text,time);
+  box.append(div);
+ });
+ box.scrollTop=box.scrollHeight;
+}
+
+function sendMessage(){
+ if(!selected)return;
+ let input=document.getElementById("messageInput");
+ let value=input.value.trim();
+ if(!value)return;
+ let time=new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+ getChat(selected).messages.push({text:value,mine:true,time});
+ input.value="";
+ persist();
+ renderMessages();
+ renderChats();
+}
+
+function showProfile(){
+ let u=getUser(selected);
+ if(!u)return;
+ alert(
+  "Имя: "+u.name+
+  "\nID: "+u.id+
+  "\nUsername: @"+u.username+
+  "\nТелефон: "+u.phone+
+  "\nО себе: "+u.about
+ );
+}
+
+// ====================================
+// ADMIN PANEL
+// ====================================
+
+function openAdmin(){
+ document.getElementById("admin").style.display="block";
+ updateCount();
+}
+
+function closeAdmin(){
+ document.getElementById("admin").style.display="none";
+}
+
+function findUser(){
+ let id=document.getElementById("userId").value.trim();
+ if(!id){
+  alert("Введи ID");
+  return;
+ }
+ let u=getUser(id);
+ currentAdminUser=u||null;
+ let result=document.getElementById("userResult");
+ result.style.display="block";
+ let box=document.getElementById("userData");
+ box.innerHTML="";
+ if(!u){
+  let msg=document.createElement("p");
+  msg.className="notice";
+  msg.textContent="Пользователь не найден в локальной базе. Это не означает, что такого Telegram-аккаунта не существует.";
+  box.append(msg);
+  document.getElementById("userNote").value="";
+  return;
+ }
+ const fields=[
+  ["Telegram ID",u.id],
+  ["Имя",u.name],
+  ["Username","@"+u.username],
+  ["Телефон",u.phone],
+  ["О себе",u.about||"Не указано"],
+  ["Источник",u.source],
+  ["Заметка",u.note||"Нет заметок"]
+ ];
+ fields.forEach(([label,value])=>{
+  let div=document.createElement("div");
+  div.className="data";
+  let l=document.createElement("label");
+  l.textContent=label;
+  let v=document.createElement("strong");
+  v.textContent=value;
+  div.append(l,v);
+  box.append(div);
+ });
+ document.getElementById("userNote").value=u.note||"";
+}
+
+function saveNote(){
+ if(!currentAdminUser){
+  alert("Сначала найди существующую запись");
+  return;
+ }
+ currentAdminUser.note=document.getElementById("userNote").value;
+ persist();
+ findUser();
+ alert("Заметка сохранена");
+}
+
+function addUser(){
+ let id=document.getElementById("newId").value.trim();
+ let name=document.getElementById("newName").value.trim();
+ let username=document.getElementById("newUsername").value.trim().replace("@","");
+ let phone=document.getElementById("newPhone").value.trim();
+ let source=document.getElementById("newSource").value.trim();
+ if(!id||!name){
+  alert("ID и имя обязательны");
+  return;
+ }
+ if(getUser(id)){
+  alert("Такая запись уже существует");
+  return;
+ }
+ database.push({
+  id,name,
+  username:username||"Не указан",
+  phone:phone||"Не указан",
+  source:source||"Добавлено вручную",
+  about:"",
+  note:""
+ });
+ persist();
+ updateCount();
+ renderChats();
+ alert("Запись добавлена");
 }
 
 function updateCount(){
-    $("count").textContent = Object.keys(users).length;
+ document.getElementById("databaseCount").textContent=
+ "Записей в базе: "+database.length;
 }
 
-/* =====================================
-   INPUT NORMALIZATION
-===================================== */
+// ====================================
+// IP ANALYZER
+// ====================================
 
-function normalizeQuery(value){
-    let query = value.trim();
-
-    query = query.replace(/^https?:\/\/(www\.)?t\.me\//i,"");
-    query = query.replace(/^https?:\/\/telegram\.me\//i,"");
-    query = query.split("?")[0].replace(/\/$/,"");
-
-    return query.replace(/^@/,"");
+function checkIP(){
+ let ip=document.getElementById("ipInput").value.trim();
+ let output=document.getElementById("ipResult");
+ let parts=ip.split(".");
+ let valid=parts.length===4&&parts.every(p=>
+  /^\d+$/.test(p)&&Number(p)>=0&&Number(p)<=255
+ );
+ if(!valid){
+  output.textContent="Введи корректный IPv4-адрес.";
+  return;
+ }
+ let nums=parts.map(Number);
+ let privateIP=
+  nums[0]===10||
+  (nums[0]===172&&nums[1]>=16&&nums[1]<=31)||
+  (nums[0]===192&&nums[1]===168)||
+  nums[0]===127||
+  nums[0]===0||
+  nums[0]>=224;
+ output.textContent=
+  "IP: "+ip+
+  "\nТип: "+(privateIP?"Локальный, специальный или зарезервированный":"Публичный IPv4")+
+  "\nГеолокация: не определена"+
+  "\nПровайдер: не определён"+
+  "\nASN: не определён"+
+  "\n\nДля получения дополнительных сетевых сведений нужен внешний источник данных.";
 }
 
-/* =====================================
-   SEARCH LOCAL DATABASE
-===================================== */
+// ====================================
+// EXPORT
+// ====================================
 
-$("searchButton").addEventListener("click",searchAccount);
-
-$("searchInput").addEventListener("keydown",event=>{
-    if(event.key === "Enter") searchAccount();
-});
-
-function searchAccount(){
-    const original = $("searchInput").value.trim();
-    const query = normalizeQuery(original);
-
-    $("results").hidden = true;
-    $("status").className = "";
-    $("status").textContent = "";
-    selectedUser = null;
-
-    if(!query){
-        setStatus("Введите ID или username.","error");
-        return;
-    }
-
-    $("searchButton").disabled = true;
-    setStatus("SEARCHING...","");
-
-    setTimeout(()=>{
-        const normalized = query.toLowerCase();
-
-        let user = users[query];
-
-        if(!user){
-            user = Object.values(users).find(profile=>
-                String(profile.username || "")
-                    .replace(/^@/,"")
-                    .toLowerCase() === normalized
-            );
-        }
-
-        $("searchButton").disabled = false;
-
-        if(user){
-            selectedUser = user;
-            displayUser(user);
-            setStatus("Профиль найден в локальной базе.","success");
-            return;
-        }
-
-        /*
-          Если пользователь не найден локально,
-          не выдумываем его личные данные.
-          Предлагаем открыть публичный Telegram-поиск.
-        */
-
-        if(/^\d{5,20}$/.test(query)){
-            setStatus(
-                "ID отсутствует в локальной базе. Telegram не предоставляет глобальный публичный поиск по ID.",
-                "error"
-            );
-            return;
-        }
-
-        if(!/^[a-zA-Z0-9_]{5,32}$/.test(query)){
-            setStatus("Неверный формат username или ссылки.","error");
-            return;
-        }
-
-        selectedUser = {
-            id:"Не получен",
-            name:"Публичный профиль",
-            username:query,
-            bio:"Не получено",
-            status:"Не проверен",
-            source:"Telegram Public Profile Link"
-        };
-
-        displayUser(selectedUser);
-
-        setStatus(
-            "Username распознан. Открой профиль Telegram для проверки.",
-            "success"
-        );
-
-    },250);
+function downloadJSON(data,name){
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;
+ a.download=name;
+ a.click();
+ URL.revokeObjectURL(url);
 }
 
-/* =====================================
-   DISPLAY
-===================================== */
-
-function displayUser(user){
-    $("r_id").textContent = user.id || "Неизвестно";
-    $("r_name").textContent = user.name || "Неизвестно";
-    $("r_username").textContent = user.username ? "@"+user.username.replace(/^@/,"") : "Неизвестно";
-    $("r_bio").textContent = user.bio || "Не получено";
-    $("r_status").textContent = user.status || "Неизвестен";
-    $("r_source").textContent = user.source || "Неизвестно";
-
-    $("name").textContent = user.name || "Неизвестно";
-    $("username").textContent = user.username ? "@"+user.username.replace(/^@/,"") : "NO USERNAME";
-    $("avatar").textContent = (user.name || "?").charAt(0).toUpperCase();
-
-    $("results").hidden = false;
+function exportUser(){
+ if(!currentAdminUser)return;
+ downloadJSON(currentAdminUser,"augram-user.json");
 }
 
-function setStatus(message,type){
-    $("status").textContent = message;
-    $("status").className = type;
+function exportDatabase(){
+ downloadJSON(database,"augram-database.json");
 }
 
-/* =====================================
-   OPEN TELEGRAM PROFILE
-===================================== */
+function clearDatabase(){
+ if(!confirm("Удалить все локальные записи?"))return;
+ database=[];
+ chats=[];
+ selected=null;
+ persist();
+ renderChats();
+ updateCount();
+ document.getElementById("userResult").style.display="none";
+}
 
-$("openTelegram").addEventListener("click",()=>{
-    if(!selectedUser || !selectedUser.username){
-        alert("Username отсутствует.");
-        return;
-    }
-
-    const username = selectedUser.username.replace(/^@/,"");
-
-    if(!/^[a-zA-Z0-9_]{5,32}$/.test(username)){
-        alert("Некорректный username.");
-        return;
-    }
-
-    window.open(
-        "https://t.me/"+encodeURIComponent(username),
-        "_blank",
-        "noopener,noreferrer"
-    );
-});
-
-/* =====================================
-   PUBLIC SEARCH
-===================================== */
-
-$("webSearch").addEventListener("click",()=>{
-    const query = $("searchInput").value.trim();
-
-    if(!query){
-        alert("Сначала введи username или ID.");
-        return;
-    }
-
-    const normalized = normalizeQuery(query);
-
-    const url = /^\d+$/.test(normalized)
-        ? "https://web.telegram.org/"
-        : "https://t.me/"+encodeURIComponent(normalized);
-
-    window.open(url,"_blank","noopener,noreferrer");
-});
-
-$("googleSearch").addEventListener("click",()=>{
-    const query = $("searchInput").value.trim();
-
-    if(!query){
-        alert("Введите поисковый запрос.");
-        return;
-    }
-
-    const normalized = normalizeQuery(query);
-
-    const url = "https://www.google.com/search?q="+
-        encodeURIComponent('site:t.me "'+normalized+'"');
-
-    window.open(url,"_blank","noopener,noreferrer");
-});
-
-$("telegramSearch").addEventListener("click",()=>{
-    window.open("https://web.telegram.org/","_blank","noopener,noreferrer");
-});
-
-/* =====================================
-   ADD PROFILE
-===================================== */
-
-$("addButton").addEventListener("click",()=>{
-    const id = $("addId").value.trim();
-    const name = $("addName").value.trim();
-    const username = $("addUsername").value.trim().replace(/^@/,"");
-    const bio = $("addBio").value.trim();
-    const accountStatus = $("addStatus").value.trim();
-
-    const message = $("addMessage");
-    message.className = "";
-
-    if(!/^\d{5,20}$/.test(id)){
-        message.textContent = "Введите корректный числовой ID.";
-        message.className = "error";
-        return;
-    }
-
-    if(!name){
-        message.textContent = "Введите имя.";
-        message.className = "error";
-        return;
-    }
-
-    if(username && !/^[a-zA-Z0-9_]{5,32}$/.test(username)){
-        message.textContent = "Некорректный username.";
-        message.className = "error";
-        return;
-    }
-
-    users[id] = {
-        id,
-        name,
-        username,
-        bio,
-        status:accountStatus || "Неизвестен",
-        source:"Manually Added"
-    };
-
-    if(!saveDatabase()) return;
-
-    message.textContent = "Профиль сохранён.";
-    message.className = "success";
-
-    ["addId","addName","addUsername","addBio","addStatus"].forEach(id=>{
-        $(id).value = "";
-    });
-});
-
-/* =====================================
-   SAVE SEARCH RESULT
-===================================== */
-
-$("saveResult").addEventListener("click",()=>{
-    if(!selectedUser) return;
-
-    if(!/^\d{5,20}$/.test(String(selectedUser.id))){
-        alert("Для сохранения в базу нужен настоящий числовой Telegram ID. Одна ссылка не подтверждает ID.");
-        return;
-    }
-
-    users[selectedUser.id] = {...selectedUser};
-
-    if(saveDatabase()){
-        alert("Профиль сохранён.");
-    }
-});
-
-/* =====================================
-   EXPORT
-===================================== */
-
-$("exportButton").addEventListener("click",()=>{
-    const blob = new Blob(
-        [JSON.stringify(users,null,4)],
-        {type:"application/json"}
-    );
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-
-    link.href = url;
-    link.download = "cyber_inspector_database.json";
-    link.click();
-
-    URL.revokeObjectURL(url);
-});
-
-/* =====================================
-   IMPORT
-===================================== */
-
-$("importButton").addEventListener("click",()=>{
-    $("fileInput").click();
-});
-
-$("fileInput").addEventListener("change",async event=>{
-    const file = event.target.files[0];
-    if(!file) return;
-
-    try{
-        const imported = JSON.parse(await file.text());
-
-        if(!imported || typeof imported !== "object" || Array.isArray(imported)){
-            throw new Error("Invalid JSON");
-        }
-
-        const validated = {};
-
-        for(const [key,user] of Object.entries(imported)){
-            if(!user || typeof user !== "object") continue;
-
-            const id = String(user.id || key);
-
-            if(!/^\d{5,20}$/.test(id)) continue;
-
-            validated[id] = {
-                id,
-                name:String(user.name || "Неизвестно"),
-                username:String(user.username || ""),
-                bio:String(user.bio || ""),
-                status:String(user.status || "Неизвестен"),
-                source:String(user.source || "Imported")
-            };
-        }
-
-        if(!Object.keys(validated).length){
-            throw new Error("No valid profiles");
-        }
-
-        if(!confirm("Импортировать "+Object.keys(validated).length+" профилей?")){
-            return;
-        }
-
-        users = {...users,...validated};
-
-        if(saveDatabase()){
-            alert("Импорт завершён.");
-        }
-
-    }catch(error){
-        alert("Ошибка импорта. Проверь JSON-файл.");
-    }
-
-    event.target.value = "";
-});
-
-/* =====================================
-   CLEAR DATABASE
-===================================== */
-
-$("clearButton").addEventListener("click",()=>{
-    if(!confirm("Удалить все локальные записи?")) return;
-
-    users = {};
-
-    if(!saveDatabase()) return;
-
-    selectedUser = null;
-    $("results").hidden = true;
-
-    setStatus("База очищена.","success");
-});
-
-/* =====================================
-   INITIALIZATION
-===================================== */
-
+renderChats();
 updateCount();
-
-console.log("CYBER INSPECTOR READY");
-console.log("Local database loaded:",Object.keys(users).length);
-
 </script>
 </body>
 </html>
